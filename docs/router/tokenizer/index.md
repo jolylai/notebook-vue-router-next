@@ -1,5 +1,15 @@
 ## 路径解析
 
+```ts
+const enum TokenizerState {
+  Static,
+  Param,
+  ParamRegExp, // custom re for a param
+  ParamRegExpEnd, // check if there is any ? + *
+  EscapeNext
+}
+```
+
 [路由的匹配语法](https://next.router.vuejs.org/zh/guide/essentials/route-matching-syntax.html)
 
 - 静态路由

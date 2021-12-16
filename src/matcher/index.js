@@ -57,7 +57,42 @@ export function createRouterMatcher(routes, globalOptions) {
     matcher.push(matcher)
   }
 
-  function resolve() {}
+  // 根据当前路由获取所有匹配的路由
+  function resolve(location) {
+    let matcher
+    let params
+    let path
+    let name
+
+    if ('path' in location) {
+      path = location.path
+      matcher = matchers.find(m => m.re.test(path))
+
+      if (matcher) {
+        params = matcher.parse(path)
+        name = matcher.record.name
+      }
+    }
+
+    // 获取所有的匹配的路由
+    const matched = []
+    let parentMatcher = matcher
+
+    while (parentMatcher) {
+      // reversed order so parents are at the beginning
+
+      matched.unshift(parentMatcher.record)
+      parentMatcher = parentMatcher.parent
+    }
+
+    return {
+      name,
+      path,
+      params,
+      matched,
+      meta: mergeMetaFields(matched)
+    }
+  }
 
   function removeRoute(matcher) {
     const index = matchers.indexOf(matcher)
@@ -66,6 +101,7 @@ export function createRouterMatcher(routes, globalOptions) {
       matcher?.children.forEach(removeRoute)
     }
   }
+
   function getRoutes() {
     return matchers
   }

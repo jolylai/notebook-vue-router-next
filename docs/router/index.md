@@ -1,23 +1,18 @@
 ## 快速开始
 
-- [vue-router-next](https://github.com/vuejs/vue-router-next)
-- [history-mode](https://next.router.vuejs.org/guide/essentials/history-mode.html#hash-mode)
-
 安装 `vue-router`
 
 ```shell
-yarn add vue-router
+yarn add vue-router@4
 ```
 
 创建`/src/router/index.js`文件
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import HelloWorld from '../components/HelloWorld'
-
-Vue.use(Router)
 
 const constantRoutes = [
   {
@@ -26,23 +21,14 @@ const constantRoutes = [
   }
 ]
 
-// 工厂函数
-const createRouter = () =>
-  new Router({
-    // mode: 'history', // require service support
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  })
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: constantRoutes
+})
 
-const router = createRouter()
+const app = createApp(App)
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
-
-export default router
+app.use(router)
 ```
 
 修改`/src/App.Vue`
@@ -61,80 +47,17 @@ export default {
 </script>
 ```
 
-## 路由模式
-
-### Hash 模式
-
 ```js
-import { createRouter, createWebHashHistory } from 'vue-router'
-
-const router = createRouter({
-  history: createWebHashHistory(),
-  routes: [
-    //...
-  ]
-})
+function createRouter() {
+  return {
+    fullPath,
+    // keep the hash encoded so fullPath is effectively path + encodedQuery +
+    // hash
+    hash,
+    query,
+    matchedRoute,
+    redirectedFrom: undefined,
+    href
+  }
+}
 ```
-
-实际的 URL 前面会有一个 `#`。因为这部分 URL 不会发送到服务器，我们无需对服务器进行特殊的配置。但不利于 SEO（搜索引擎优化），
-
-### HTML5 模式
-
-```js
-import { createRouter, createWebHistory } from 'vue-router'
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    //...
-  ]
-})
-```
-
-## 面包屑
-
-```js
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/user',
-      component: Layout,
-      name: 'User',
-      meta: {
-        title: 'User'
-      },
-      children: [
-        {
-          path: 'list',
-          component: () => import('@/views/user/list'),
-          name: 'List',
-          meta: { title: 'List' }
-        },
-        {
-          path: 'detail/:id',
-          component: () => import('@/views/user/detail'),
-          name: 'Detail',
-          meta: { title: 'Detail' }
-        }
-      ]
-    }
-  ]
-})
-```
-
-## createRouter
-
-```js
-function addRoute(parentOrRoute) {}
-```
-
-## 流程
-
-- history
-
-  - hash
-  - html5
-
-- matcher
-
-1. 路径解析成 token

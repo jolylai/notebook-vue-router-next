@@ -2,16 +2,16 @@
 home: true
 # heroImage: /logo.png
 # heroAlt: Logo image
-heroText: Vue
-tagline: use vue hooks like
+heroText: Vue Router Next
+tagline: Vue Router Next
 actionText: Get Started
-actionLink: /guide/
+actionLink: /router/
 features:
-  - title: Simplicity First
-    details: Minimal setup with markdown-centered project structure helps you focus on writing.
-  - title: Vue-Powered
-    details: Enjoy the dev experience of Vue + webpack, use Vue components in markdown, and develop custom themes with Vue.
-  - title: Performant
-    details: VitePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.
+  - title: History
+    details: Router history mode
+  - title: Matcher
+    details: Router matcher to manage routes
+  - title: Hooks
+    details: Routes hooks
 footer: MIT Licensed | Copyright © 2021-present
 ---

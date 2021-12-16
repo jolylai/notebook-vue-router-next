@@ -39,6 +39,8 @@ export function createRouterMatcher(routes, globalOptions) {
         }
       }
 
+      insertMatcher(matcher)
+
       // if there was no original record, then the first one was not an alias and all
       // other alias (if any) need to reference this record when adding children
       originalRecord = originalRecord || matcher
@@ -51,11 +53,19 @@ export function createRouterMatcher(routes, globalOptions) {
       : () => {}
   }
 
-  //
-  function insertMatcher(matcher) {}
+  function insertMatcher(matcher) {
+    matcher.push(matcher)
+  }
 
   function resolve() {}
-  function removeRoute() {}
+
+  function removeRoute(matcher) {
+    const index = matchers.indexOf(matcher)
+    if (index > -1) {
+      matchers.splice(index, 1)
+      matcher?.children.forEach(removeRoute)
+    }
+  }
   function getRoutes() {
     return matchers
   }

@@ -1,4 +1,4 @@
-# notebook-vue
+# notebook-vue-router-next
 
 ## Getting Started
 
